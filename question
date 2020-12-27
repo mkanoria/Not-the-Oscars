@@ -1,0 +1,62 @@
+Thank you for taking the time to complete our first coding challenge!  
+
+Some items to remember before you click "start"
+__________________________
+- This challenge will be available from 12/1/20 - 1/1/21. After midnight PST on 1/1/21, we'll no longer accept this challenge. 
+- This challenge is the first of our three to be offered. You are only required to submit one. 
+- Once you start this challenge, you'll have 90 continuous minutes to complete it. Be sure to block time appropriately. If you do not complete the test in the allotted time, we recommend you submit the third challenge which will be emailed on 1/4/21.
+- Submit the same name you used on your application via Greenhouse or Jumpstart. If you have not applied to the internship yet, please do so via one of these platforms.
+- The challenge cannot be submitted unless you pass 80% of the visible test cases. 
+- If you are new to Coderpad, try spending some time in their sandbox to get a feel for the platform: https://coderpad.io/sandbox
+- Unfortunately, due to the volume of applications we receive, we are unable to offer specific feedback on challenges.  
+- You will not receive a confirmation email once submitted. 
+
+If you have any additional questions regarding the challenge, please email university@twitch.tv. 
+
+Best of luck!
+___________________________________
+
+Question #2:  Twitch is rewarding viewers for their time spent in a channel via drops. A Drops campaign is an event to hold at most five drops. 
+
+Each drop can has at most one parent node and at most one child node, representing its trigger rule. For example, if drop B's parent is A, and child is C, A has to be triggered first, and then B, then C. So parent and child is representing triggering sequence. And in this relationship, there should never be a circle.
+
+Please write a class takes in a list of drop dependencies, and implement the following operations:
+1. modify(drops, <dropA,dropB>, "swap") - swap, this will swap the position of A and B. Or say swap the children and parent relationships between those two drops.
+2. modify(drops, dropA, "remove") - remove, this will remove dropA from the entire campaign, if it has child, the child will move one level up. 
+3. modify(drops, <dropA,dropB>, "add") - "add",  this will add dropB as a child of dropA. dropA could not have child if adding B as its child, otherwise return "INVALID".
+
+
+Example:
+For campaign holding five drops like the following structure: 
+
+A -> B -> C -> D (A is parent of B, B is parent of C...)
+E (could be triggered independently of the above chain)
+
+Input format will be: each chain is separated by comma, parent and child relationship will be represented by ->. So the example above will look like A->B->C->D,E(comma separated), and please be assured that drop name will not contain arrow or comma, will just be simple string with no duplication for each drop name.
+
+- modify("A->B->C->D,E", "B,E", "swap"), then result becomes:
+    A -> E -> C -> D
+    B
+
+Your output should look like: A->E->C->D,B (the result should be sorted by alphabetical order of its head. for example, B,A->E->C->D is not right even though it represents right chaining relationship.)
+
+- modify("A->B->C->D,E", "B", "remove"), then result becomes:
+    A -> C -> D
+    E
+    
+Your output should look like: A->C->D,E
+
+- modify("A->B->C->D,E", "E,B", "add"), then result becomes
+    A
+    E -> B -> C -> D
+    
+Your output should look like A,E->B->C->D
+
+Please note that:
+1. If any action causes a circle in the final look, for example, add A as child of C in A->B->C will cause A->B->C->A, which is a circle/loop. Your function should return "INVALID".
+2. Return is always in alphabetical order by its first drop in the chain.
+3. Unnecessary "->" and "," should all be removed, for example, the last arrow in "A->B->" is unnecessary and in  "A,B,C," the last comma is unnecessary.
+4. If any of the drop to swap, add or remove does not exist in the given list, should always return "INVALID".
+5. Other cases of invalid inputs should all return "INVALID".
+6. We will have at most two chains of drops, e.g A->B->C,E->F->G is a possible input, and A->B,C->D,E->F is not a possible input in all cases because it has three chains (mainly to simplify this problem).
+
