@@ -10,9 +10,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
-  menuButton: {
-    marginRight: theme.spacing(2),
-  },
   title: {
     flexGrow: 1,
     display: "none",
@@ -61,21 +58,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SearchAppBar() {
+function SearchAppBar(props) {
   const classes = useStyles();
+
+  const { setSearch } = props;
 
   return (
     <div className={classes.root}>
       <AppBar position="static" style={{ background: "#64943E" }}>
         <Toolbar>
-          {/* <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton> */}
           <Typography className={classes.title} variant="h4" noWrap>
             The Shoppies
           </Typography>
@@ -90,6 +81,9 @@ function SearchAppBar() {
                 input: classes.inputInput,
               }}
               inputProps={{ "aria-label": "search" }}
+              onChange={(e) => {
+                setSearch(e.target.value);
+              }}
             />
           </div>
         </Toolbar>

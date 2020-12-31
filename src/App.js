@@ -10,19 +10,27 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import IconButton from "@material-ui/core/IconButton";
+import FavoriteIcon from "@material-ui/icons/Favorite";
+import InfoIcon from "@material-ui/icons/Info";
 import Container from "@material-ui/core/Container";
 
 import CustomizedDialogs from "./Dialog";
+import { myTopMovies } from "./topMovies";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    height: "100%",
-    // flexDirection: "column",
+    // display: "flex",
+    // height: "100%",
+    maxWidth: 250,
+    // height: 400,
+    // margin: "auto",
+    // maxHeight: 300,
+    // flexDirection: "row",
   },
   cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8),
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(2),
   },
   details: {
     display: "flex",
@@ -33,7 +41,10 @@ const useStyles = makeStyles((theme) => ({
     // flexGrow: 1,
   },
   cover: {
-    width: 151,
+    // width: 20,
+    // width: "100%",
+    // height: 0,
+    paddingTop: "56.25%",
   },
   controls: {
     display: "flex",
@@ -45,36 +56,98 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const [movies, setMovies] = useState([]);
+  const [open, setOpen] = useState(false); // State to monitor if dialog is open
+  const [currID, setCurrID] = useState("");
+  const [search, setSearch] = useState(""); // TODO: Can do better
+  // TODO: NEED TO FIX THIS!
+  const [plot, setPlot] = useState("");
+  const [title, setTitle] = useState("");
+  const [year, setYear] = useState("");
 
+  // Search hook?
   useEffect(() => {
-    axios
-      .get(`http://www.omdbapi.com/?apikey=d80719e6&s=wonder`)
-      .then((res) => {
-        // console.log(res);
-        const results = res.data.Search;
-        // console.log(results);
-        setMovies(results);
-      });
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      console.log(search);
+      if (!search) {
+        setMovies(myTopMovies);
+        return;
+      }
+      // Send Axios request here
+      axios
+        .get(`http://www.omdbapi.com/?apikey=d80719e6&s=${search}`)
+        .then((res) => {
+          // Check if response exists
+          if (res.data.Response === "False") {
+            // If response does not exist, set list of movies to default
+            setMovies(myTopMovies);
+            return;
+          }
+          const results = res.data.Search;
+          // console.log(results);
+          setMovies(results);
+        });
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [search]);
+
+  // Hook to get movie plot if modal opened
+  useEffect(() => {
+    async function fetchMoviePlot() {
+      axios
+        .get(`http://www.omdbapi.com/?apikey=d80719e6&plot=full&i=${currID}`)
+        // .get(`http://www.omdbapi.com/?apikey=d80719e6&plot=full&i=tt0451279`)
+        .then((res) => {
+          console.log(res);
+          const result = res.data.Plot;
+          setPlot(result);
+        });
+    }
+    if (open && currID) {
+      fetchMoviePlot();
+    }
+  }, [open, currID]);
 
   const classes = useStyles();
 
-  const handleClickOpen = () => {
+  const handleOpen = (imdbID, title, year) => (e) => {
+    // console.log("Movie id is ", e.target.value);
+    setCurrID(imdbID);
+    setTitle(title);
+    setYear(year);
     setOpen(true);
   };
+
   const handleClose = () => {
     setOpen(false);
+    setPlot("");
+    setCurrID("");
   };
 
   return (
     <div className="App">
-      <SearchAppBar />
-      <Container className={classes.cardGrid} maxWidth="md">
-        <CustomizedDialogs />
+      <SearchAppBar setSearch={setSearch} setMovies={setMovies} />
+      <Container className={classes.cardGrid} maxWidth="lg">
+        {/* <Button variant="outlined" color="primary" onClick={handleOpen}>
+          Open dialog
+        </Button> */}
+        <CustomizedDialogs
+          handleClose={handleClose}
+          open={open}
+          plot={plot}
+          year={year}
+          title={title}
+        />
         <Grid container spacing={2}>
           {movies.map((movie) => (
-            <Grid item key={movie.imdbID} xs={12} sm={6} md={4}>
+            <Grid item key={movie.imdbID} xs={12} sm={6} md={4} sm>
               <Card className={classes.root}>
+                <CardMedia
+                  className={classes.cover}
+                  image={movie.Poster}
+                  // image="https://source.unsplash.com/random"
+                  title={movie.Title}
+                />
                 <div className={classes.details}>
                   <CardContent className={classes.content}>
                     <Typography component="h5" variant="h5">
@@ -84,35 +157,22 @@ function App() {
                       {movie.Year}
                     </Typography>
                   </CardContent>
-                  <CardActions>
-                    <div className={classes.controls}>
-                      <Button size="small" color="primary">
-                        Nominate!
-                      </Button>
-                    </div>
-                  </CardActions>
-                  {/* <CardMedia
-                    className={classes.cardMedia}
-                    image={movie.Poster}
-                    title={movie.Title}
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="h5" component="h5">
-                      {movie.Title}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
+                  <CardActions disableSpacing>
                     <IconButton aria-label="add to favorites">
-                      <FavoriteIcon />
+                      <FavoriteIcon fontSize="small" />
                     </IconButton>
-                  </CardActions> */}
+                    <IconButton
+                      aria-label="share"
+                      onClick={handleOpen(
+                        movie.imdbID,
+                        movie.Title,
+                        movie.Year
+                      )} // TODO: fix this!
+                    >
+                      <InfoIcon fontSize="small" />
+                    </IconButton>
+                  </CardActions>
                 </div>
-                <CardMedia
-                  className={classes.cover}
-                  image={movie.Poster}
-                  // image="https://source.unsplash.com/random"
-                  title={movie.Title}
-                />
               </Card>
             </Grid>
           ))}
