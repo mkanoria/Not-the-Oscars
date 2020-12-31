@@ -37,10 +37,10 @@ const useStyles = makeStyles((theme) => ({
     // flexGrow: 1,
   },
   cover: {
-    // width: 20,
+    width: 151,
     // width: "100%",
     // height: 0,
-    paddingLeft: "60.25%",
+    // paddingLeft: "80.25%",
   },
   controls: {
     display: "flex",
@@ -123,7 +123,7 @@ function App() {
   return (
     <div className="App">
       <SearchAppBar setSearch={setSearch} setMovies={setMovies} />
-      <Container className={classes.cardGrid} maxWidth="lg">
+      <Container className={classes.cardGrid} maxWidth="md">
         {/* <Button variant="outlined" color="primary" onClick={handleOpen}>
           Open dialog
         </Button> */}
