@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cover: {
     width: 151,
+    marginLeft: "auto",
     // width: "100%",
     // height: 0,
     // paddingLeft: "80.25%",
