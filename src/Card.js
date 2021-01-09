@@ -45,7 +45,7 @@ export default function MovieCard(props) {
   const [selected, setSelected] = useState(false);
 
   const selectMovie = (movie) => (e) => {
-    if (updateFavourites(movie.imdbID, movie.Title, movie.Year)) {
+    if (updateFavourites(movie)) {
       setSelected((prevValue) => !prevValue);
     }
   };

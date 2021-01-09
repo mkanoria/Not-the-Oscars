@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
 function SearchAppBar(props) {
   const classes = useStyles();
 
-  const { favourites, setSearch } = props;
+  const { favourites, setSearch, setShowFavourites } = props;
 
   return (
     <div className={classes.root}>
@@ -73,10 +73,20 @@ function SearchAppBar(props) {
           <Typography className={classes.title} variant="h4" noWrap>
             The Shoppies
           </Typography>
-          <IconButton aria-label="cart">
+          <IconButton
+            aria-label="cart"
+            onClick={() => {
+              setShowFavourites((curr) => !curr);
+            }}
+            disabled={favourites.length === 0}
+          >
             <Badge badgeContent={favourites.length} color="primary">
               <LocalActivityRoundedIcon
-                style={{ color: "white", fontSize: 30 }}
+                style={{
+                  color: favourites.length === 0 ? "inherit" : "white",
+                  fontSize: 30,
+                }}
+                disabled={true}
               />
             </Badge>
           </IconButton>

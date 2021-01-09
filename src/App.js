@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const [favourites, setFavourites] = useState([]);
+  const [showFavourites, setShowFavourites] = useState(false);
   const [movies, setMovies] = useState([]);
   // State used to handle alert props
   const [showAlert, setShowAlert] = useState(false);
@@ -41,9 +42,17 @@ function App() {
   const [year, setYear] = useState("");
 
   const fetchMoreData = () => {
-    console.log("here");
     setPage((curr) => curr + 1);
   };
+
+  useEffect(() => {
+    if (showFavourites) {
+      setMovies(favourites);
+    } else {
+      // Toggle back
+      setMovies(myTopMovies);
+    }
+  }, [showFavourites, favourites]);
 
   // Search hook
   useEffect(() => {
@@ -101,7 +110,6 @@ function App() {
         .get(`http://www.omdbapi.com/?apikey=d80719e6&plot=full&i=${currID}`)
         // .get(`http://www.omdbapi.com/?apikey=d80719e6&plot=full&i=tt0451279`)
         .then((res) => {
-          console.log(res);
           const result = res.data.Plot;
           setPlot(result);
         });
@@ -121,11 +129,11 @@ function App() {
 
   const classes = useStyles();
 
-  const updateFavourites = (imdbID, title, year) => {
+  const updateFavourites = (movie) => {
     // Remove from favourites if it already exists
-    if (favourites.some((fav) => fav.imdbID === imdbID)) {
+    if (favourites.some((fav) => fav.imdbID === movie.imdbID)) {
       // Same ID found
-      setFavourites(favourites.filter((fav) => fav.imdbID !== imdbID));
+      setFavourites(favourites.filter((fav) => fav.imdbID !== movie.imdbID));
       return true;
     }
     // Check for size
@@ -140,10 +148,7 @@ function App() {
       // Don't update the list of favourites
       return false;
     }
-    setFavourites((original) => [
-      ...original,
-      { imdbID: imdbID, title: title, year: year },
-    ]);
+    setFavourites((original) => [...original, movie]);
     return true;
   };
 
@@ -165,8 +170,8 @@ function App() {
     <div className="App">
       <SearchAppBar
         setSearch={setSearch}
-        setMovies={setMovies}
         favourites={favourites}
+        setShowFavourites={setShowFavourites}
       />
       <Alert
         message={alertMessage}
@@ -179,25 +184,38 @@ function App() {
         next={fetchMoreData}
         hasMore={hasMore}
         loader={
-          <p style={{ textAlign: "center" }}>
+          <span style={{ textAlign: "center", paddingBottom: 3 }}>
             <Typography component="h5" variant="h5">
               Loading! 👀
             </Typography>
-          </p>
+          </span>
         }
         endMessage={
           page === 1 ? (
             ""
           ) : (
-            <p style={{ textAlign: "center" }}>
+            <span style={{ textAlign: "center" }}>
               <Typography variant="button" display="block">
                 No more results found 😞
               </Typography>
-            </p>
+            </span>
           )
         }
       >
         <Container className={classes.cardGrid} maxWidth="md">
+          {showFavourites && (
+            <span style={{ textAlign: "center", paddingBottom: 2 }}>
+              {favourites.length ? (
+                <Typography component="h4" variant="h4">
+                  Your Nominations
+                </Typography>
+              ) : (
+                <Typography component="h4" variant="h4">
+                  No movies nominated, get started by searching!
+                </Typography>
+              )}
+            </span>
+          )}
           <CustomizedDialogs
             handleClose={handleClose}
             open={open}
