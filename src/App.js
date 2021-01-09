@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-import Button from "@material-ui/core/Button";
 import SearchAppBar from "./AppBar";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -52,6 +51,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  const [favourites, setFavourites] = useState([]);
   const [movies, setMovies] = useState([]);
   const [open, setOpen] = useState(false); // State to monitor if dialog is open
   const [currID, setCurrID] = useState("");
@@ -107,7 +107,22 @@ function App() {
 
   const classes = useStyles();
 
-  const handleOpen = (imdbID, title, year) => (e) => {
+  const addToFavourites = (imdbID, title, year) => (e) => {
+    // Don't allow duplicates
+    if (favourites.some((fav) => fav.imdbID === imdbID)) {
+      // Same ID found
+      return;
+    }
+    // Check for size
+
+    //
+    setFavourites((original) => [
+      ...original,
+      { imdbID: imdbID, title: title, year: year },
+    ]);
+  };
+
+  const handleModalOpen = (imdbID, title, year) => (e) => {
     // console.log("Movie id is ", e.target.value);
     setCurrID(imdbID);
     setTitle(title);
@@ -123,7 +138,11 @@ function App() {
 
   return (
     <div className="App">
-      <SearchAppBar setSearch={setSearch} setMovies={setMovies} />
+      <SearchAppBar
+        setSearch={setSearch}
+        setMovies={setMovies}
+        favourites={favourites}
+      />
       <Container className={classes.cardGrid} maxWidth="md">
         {/* <Button variant="outlined" color="primary" onClick={handleOpen}>
           Open dialog
@@ -149,12 +168,19 @@ function App() {
                     </Typography>
                   </CardContent>
                   <CardActions disableSpacing>
-                    <IconButton aria-label="add to favorites">
+                    <IconButton
+                      aria-label="add to favorites"
+                      onClick={addToFavourites(
+                        movie.imdbID,
+                        movie.Title,
+                        movie.Year
+                      )} // TODO: Change this to show animation on adding
+                    >
                       <FavoriteIcon fontSize="small" />
                     </IconButton>
                     <IconButton
-                      aria-label="share"
-                      onClick={handleOpen(
+                      aria-label="info"
+                      onClick={handleModalOpen(
                         movie.imdbID,
                         movie.Title,
                         movie.Year
