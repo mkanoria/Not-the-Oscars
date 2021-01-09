@@ -16,7 +16,7 @@ export default function Alert(props) {
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "left",
+          horizontal: "center",
         }}
         open={show}
         autoHideDuration={6000}
