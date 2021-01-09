@@ -7,7 +7,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 
 import CustomizedDialogs from "./Dialog";
-import MovieCard from "./card";
+import MovieCard from "./Card";
+import Alert from "./Alert";
 import { myTopMovies } from "./topMovies";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,6 +22,7 @@ function App() {
   const [favourites, setFavourites] = useState([]);
   const [movies, setMovies] = useState([]);
   const [open, setOpen] = useState(false); // State to monitor if dialog is open
+  const [showAlert, setShowAlert] = useState(false);
   const [currID, setCurrID] = useState("");
   const [search, setSearch] = useState(""); // TODO: Can do better
   // TODO: NEED TO FIX THIS!
@@ -75,21 +77,27 @@ function App() {
   const classes = useStyles();
 
   const updateFavourites = (imdbID, title, year) => {
-    // Don't allow duplicates
-    console.log("Adding fav");
+    // Remove from favourites if it already exists
     if (favourites.some((fav) => fav.imdbID === imdbID)) {
       // Same ID found
       setFavourites(favourites.filter((fav) => fav.imdbID !== imdbID));
-      return;
+      return true;
     }
     // Check for size
-    if (favourites.length == 4) {
-      // Open popup showing 5 movies selected!
+    if (favourites.length === 4) {
+      // When the fifth movie is being added, favourites has 4 elements
+      setShowAlert(true);
+    } else if (favourites.length === 5) {
+      // Open popup showing 5 movies selected
+      setShowAlert(true);
+      // Don't update the list of favourites
+      return false;
     }
     setFavourites((original) => [
       ...original,
       { imdbID: imdbID, title: title, year: year },
     ]);
+    return true;
   };
 
   const handleModalOpen = (imdbID, title, year) => (e) => {
@@ -113,6 +121,7 @@ function App() {
         setMovies={setMovies}
         favourites={favourites}
       />
+      <Alert showAlert={showAlert} setShowAlert={setShowAlert} />
       <Container className={classes.cardGrid} maxWidth="md">
         <CustomizedDialogs
           handleClose={handleClose}
