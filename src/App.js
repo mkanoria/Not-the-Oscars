@@ -2,51 +2,18 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 import SearchAppBar from "./AppBar";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardActions from "@material-ui/core/CardActions";
-import CardMedia from "@material-ui/core/CardMedia";
 import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import IconButton from "@material-ui/core/IconButton";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import InfoIcon from "@material-ui/icons/Info";
 import Container from "@material-ui/core/Container";
 
 import CustomizedDialogs from "./Dialog";
+import MovieCard from "./card";
 import { myTopMovies } from "./topMovies";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    height: "100%",
-    // flexDirection: "column",
-  },
   cardGrid: {
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(2),
-  },
-  details: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  content: {
-    flex: "1 0 auto",
-    // flexGrow: 1,
-  },
-  cover: {
-    width: 151,
-    marginLeft: "auto",
-    // width: "100%",
-    // height: 0,
-    // paddingLeft: "80.25%",
-  },
-  controls: {
-    display: "flex",
-    alignItems: "center",
-    paddingLeft: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
   },
 }));
 
@@ -107,15 +74,18 @@ function App() {
 
   const classes = useStyles();
 
-  const addToFavourites = (imdbID, title, year) => (e) => {
+  const updateFavourites = (imdbID, title, year) => {
     // Don't allow duplicates
+    console.log("Adding fav");
     if (favourites.some((fav) => fav.imdbID === imdbID)) {
       // Same ID found
+      setFavourites(favourites.filter((fav) => fav.imdbID !== imdbID));
       return;
     }
     // Check for size
-
-    //
+    if (favourites.length == 4) {
+      // Open popup showing 5 movies selected!
+    }
     setFavourites((original) => [
       ...original,
       { imdbID: imdbID, title: title, year: year },
@@ -144,9 +114,6 @@ function App() {
         favourites={favourites}
       />
       <Container className={classes.cardGrid} maxWidth="md">
-        {/* <Button variant="outlined" color="primary" onClick={handleOpen}>
-          Open dialog
-        </Button> */}
         <CustomizedDialogs
           handleClose={handleClose}
           open={open}
@@ -156,48 +123,12 @@ function App() {
         />
         <Grid container spacing={2}>
           {movies.map((movie) => (
-            <Grid item key={movie.imdbID} xs={12} sm={6} md={4}>
-              <Card className={classes.root}>
-                <div className={classes.details}>
-                  <CardContent className={classes.content}>
-                    <Typography component="h5" variant="h5">
-                      {movie.Title}
-                    </Typography>
-                    <Typography variant="subtitle1" color="textSecondary">
-                      {movie.Year}
-                    </Typography>
-                  </CardContent>
-                  <CardActions disableSpacing>
-                    <IconButton
-                      aria-label="add to favorites"
-                      onClick={addToFavourites(
-                        movie.imdbID,
-                        movie.Title,
-                        movie.Year
-                      )} // TODO: Change this to show animation on adding
-                    >
-                      <FavoriteIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton
-                      aria-label="info"
-                      onClick={handleModalOpen(
-                        movie.imdbID,
-                        movie.Title,
-                        movie.Year
-                      )} // TODO: fix this!
-                    >
-                      <InfoIcon fontSize="small" />
-                    </IconButton>
-                  </CardActions>
-                </div>
-                <CardMedia
-                  className={classes.cover}
-                  image={movie.Poster}
-                  // image="https://source.unsplash.com/random"
-                  title={movie.Title}
-                />
-              </Card>
-            </Grid>
+            <MovieCard
+              key={movie.imdbID}
+              movie={movie}
+              handleModalOpen={handleModalOpen}
+              updateFavourites={updateFavourites}
+            />
           ))}
         </Grid>
       </Container>
