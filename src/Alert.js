@@ -4,10 +4,11 @@ import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
 export default function Alert(props) {
-  const { showAlert, setShowAlert } = props;
+  const { message, setMessage, show, setShow } = props;
 
   const handleClose = (event, reason) => {
-    setShowAlert(false);
+    setShow(false);
+    setMessage("");
   };
 
   return (
@@ -17,10 +18,10 @@ export default function Alert(props) {
           vertical: "bottom",
           horizontal: "left",
         }}
-        open={showAlert}
+        open={show}
         autoHideDuration={6000}
         onClose={handleClose}
-        message="5 Movies Nominated!"
+        message={message}
         action={
           <React.Fragment>
             <IconButton

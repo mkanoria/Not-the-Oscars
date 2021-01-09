@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(4),
     paddingBottom: theme.spacing(2),
   },
+  center: {
+    margin: "auto",
+  },
 }));
 
 function App() {
@@ -23,14 +26,16 @@ function App() {
   const [movies, setMovies] = useState([]);
   const [open, setOpen] = useState(false); // State to monitor if dialog is open
   const [showAlert, setShowAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [currID, setCurrID] = useState("");
   const [search, setSearch] = useState(""); // TODO: Can do better
+  const [page, setPage] = useState();
   // TODO: NEED TO FIX THIS!
   const [plot, setPlot] = useState("");
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
 
-  // Search hook?
+  // Search hook
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       console.log(search);
@@ -46,18 +51,22 @@ function App() {
           if (res.data.Response === "False") {
             // If response does not exist, set list of movies to default
             setMovies(myTopMovies);
+            setAlertMessage(`No results found for ${search}`);
+            setShowAlert(true);
             return;
           }
+          // Calculate page number
+          const numberOfResults = res.data.totalResults;
+          setPage(Math.floor(numberOfResults / 10));
           const results = res.data.Search;
-          // console.log(results);
-          setMovies(results);
+          setMovies((old) => [...old, ...results]);
         });
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
   }, [search]);
 
-  // Hook to get movie plot if modal opened
+  // Hook to get movie details if modal opened
   useEffect(() => {
     async function fetchMoviePlot() {
       axios
@@ -86,9 +95,11 @@ function App() {
     // Check for size
     if (favourites.length === 4) {
       // When the fifth movie is being added, favourites has 4 elements
+      setAlertMessage("5 Movies Nominated!");
       setShowAlert(true);
     } else if (favourites.length === 5) {
       // Open popup showing 5 movies selected
+      setAlertMessage("5 Movies Nominated!");
       setShowAlert(true);
       // Don't update the list of favourites
       return false;
@@ -121,7 +132,12 @@ function App() {
         setMovies={setMovies}
         favourites={favourites}
       />
-      <Alert showAlert={showAlert} setShowAlert={setShowAlert} />
+      <Alert
+        message={alertMessage}
+        setMessage={setAlertMessage}
+        show={showAlert}
+        setShow={setShowAlert}
+      />
       <Container className={classes.cardGrid} maxWidth="md">
         <CustomizedDialogs
           handleClose={handleClose}
