@@ -36,5 +36,7 @@ Components are built from [`material-ui`](http://material-ui.com/)
 
 ## Future improvements
 
+TODO
+
 ---
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
