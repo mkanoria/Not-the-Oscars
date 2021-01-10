@@ -23,20 +23,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const useStateWithLocalStorage = (localStorageKey) => {
-//   let store = localStorage.getItem(localStorageKey) || "";
-//   console.log("Store is ", store);
-//   if (store !== "") {
-//     store = JSON.parse(store);
-//   }
-//   const [value, setValue] = React.useState(store);
+const useStateWithLocalStorage = (localStorageKey) => {
+  let store = localStorage.getItem(localStorageKey) || "";
+  console.log("Store is ", store);
+  if (store !== "") {
+    store = JSON.parse(store);
+  }
+  const [value, setValue] = React.useState(store);
 
-//   React.useEffect(() => {
-//     localStorage.setItem(localStorageKey, JSON.stringify(value));
-//   }, [value, localStorageKey]);
+  React.useEffect(() => {
+    localStorage.setItem(localStorageKey, JSON.stringify(value));
+  }, [value, localStorageKey]);
 
-//   return [value, setValue];
-// };
+  return [value, setValue];
+};
 
 function App() {
   const [favourites, setFavourites] = useState([]);
@@ -58,7 +58,7 @@ function App() {
 
   const classes = useStyles();
   // localStore -> []
-  // const [localStore, setLocalStore] = useStateWithLocalStorage("favourites");
+  const [localStore, setLocalStore] = useStateWithLocalStorage("favourites");
 
   const fetchMoreData = () => {
     setPage((curr) => curr + 1);
@@ -136,21 +136,24 @@ function App() {
   }, [open, currID]);
 
   useEffect(() => {
-    // if (localStore) {
-    //   setFavourites(localStore);
-    // }
     setAlertMessage(
       `To start, here are some of my favourite movies of 2020 🍿`
     );
     setShowAlert(true);
   }, []);
 
+  useEffect(() => {
+    if (localStore) {
+      setFavourites(localStore);
+    }
+  }, [localStore]);
+
   const updateFavourites = (movie) => {
     // Remove from favourites if it already exists
     if (favourites.some((fav) => fav.imdbID === movie.imdbID)) {
       // Same ID found
       setFavourites(favourites.filter((fav) => fav.imdbID !== movie.imdbID));
-      // setLocalStore(localStore.filter((fav) => fav.imdbID !== movie.imdbID)); // Remove from local storage
+      setLocalStore(localStore.filter((fav) => fav.imdbID !== movie.imdbID)); // Remove from local storage
       return true;
     }
     // Check for size
@@ -166,7 +169,7 @@ function App() {
       return false;
     }
     setFavourites((original) => [...original, movie]);
-    // setLocalStore((original) => [...original, movie]); // Store values in localStorage
+    setLocalStore((original) => [...original, movie]); // Store values in localStorage
     return true;
   };
 
