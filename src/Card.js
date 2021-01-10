@@ -77,7 +77,7 @@ export default function MovieCard(props) {
             </IconButton>
             <IconButton
               aria-label="info"
-              onClick={handleModalOpen(movie.imdbID, movie.Title, movie.Year)} // TODO: fix this!
+              onClick={handleModalOpen(movie)} // TODO: fix this!
             >
               <InfoIcon fontSize="small" />
             </IconButton>

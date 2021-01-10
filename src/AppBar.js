@@ -8,6 +8,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import IconButton from "@material-ui/core/IconButton";
 import Badge from "@material-ui/core/Badge";
 import LocalActivityRoundedIcon from "@material-ui/icons/LocalActivityRounded";
+import { myTopMovies } from "./topMovies";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 function SearchAppBar(props) {
   const classes = useStyles();
 
-  const { favourites, setSearch, setShowFavourites } = props;
+  const { favourites, setSearch, setMovies, setShowFavourites } = props;
 
   return (
     <div className={classes.root}>
@@ -76,9 +77,13 @@ function SearchAppBar(props) {
           <IconButton
             aria-label="cart"
             onClick={() => {
-              setShowFavourites((curr) => !curr);
+              setShowFavourites((curr) => {
+                if (curr) {
+                  setMovies(myTopMovies);
+                }
+                return !curr;
+              });
             }}
-            disabled={favourites.length === 0}
           >
             <Badge badgeContent={favourites.length} color="primary">
               <LocalActivityRoundedIcon

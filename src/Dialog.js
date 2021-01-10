@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -9,7 +8,6 @@ import MuiDialogContent from "@material-ui/core/DialogContent";
 import MuiDialogActions from "@material-ui/core/DialogActions";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import { CircularProgress } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 
 const styles = (theme) => ({
@@ -59,8 +57,16 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 export default function CustomizedDialogs(props) {
-  const { open, plot, handleClose, title, year } = props;
-
+  const { open, plot, handleClose, title, year, rating } = props;
+  const imdbRating = parseInt(rating);
+  let ratingColor = "FireBrick";
+  if (imdbRating) {
+    if (imdbRating >= 8) {
+      ratingColor = "DarkGreen";
+    } else if (imdbRating >= 6) {
+      ratingColor = "SteelBlue";
+    }
+  }
   return (
     <div>
       <Dialog
@@ -88,28 +94,23 @@ export default function CustomizedDialogs(props) {
           {plot ? (
             <Typography gutterBottom>{plot}</Typography>
           ) : (
-            // <CircularProgress />
-            <Typography gutterBottom>LOADING</Typography>
+            <span style={{ textAlign: "center" }}>
+              <Typography gutterBottom>LOADING</Typography>
+            </span>
           )}
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={handleClose} color="primary">
-            Nominate!
+          <Button
+            variant="outlined"
+            color="secondary"
+            disabled
+            size="small"
+            style={{ color: ratingColor }}
+          >
+            Rating: {rating}
           </Button>
         </DialogActions>
       </Dialog>
     </div>
   );
-}
-
-{
-  /* <Button
-  variant="outlined"
-  color="secondary"
-  disabled
-  size="small"
-  style={{ color: "red" }}
->
-  2017
-</Button>; */
 }

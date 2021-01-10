@@ -8,7 +8,7 @@ import Container from "@material-ui/core/Container";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Typography from "@material-ui/core/Typography";
 
-import CustomizedDialogs from "./Dialog";
+import InfoDialog from "./Dialog";
 import MovieCard from "./Card";
 import Alert from "./Alert";
 import { myTopMovies } from "./topMovies";
@@ -30,16 +30,16 @@ function App() {
   // State used to handle alert props
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const [currID, setCurrID] = useState("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
-  // TODO: NEED TO FIX THIS!
   // State used to handle Modal props
+  const [currID, setCurrID] = useState("");
   const [open, setOpen] = useState(false); // State to monitor if dialog is open
   const [plot, setPlot] = useState("");
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
+  const [rating, setRating] = useState("");
 
   const fetchMoreData = () => {
     setPage((curr) => curr + 1);
@@ -48,9 +48,6 @@ function App() {
   useEffect(() => {
     if (showFavourites) {
       setMovies(favourites);
-    } else {
-      // Toggle back
-      setMovies(myTopMovies);
     }
   }, [showFavourites, favourites]);
 
@@ -108,10 +105,10 @@ function App() {
     async function fetchMoviePlot() {
       axios
         .get(`http://www.omdbapi.com/?apikey=d80719e6&plot=full&i=${currID}`)
-        // .get(`http://www.omdbapi.com/?apikey=d80719e6&plot=full&i=tt0451279`)
         .then((res) => {
           const result = res.data.Plot;
           setPlot(result);
+          setRating(res.data.imdbRating);
         });
     }
     if (open && currID) {
@@ -120,7 +117,6 @@ function App() {
   }, [open, currID]);
 
   useEffect(() => {
-    // Show alert with `no results found`
     setAlertMessage(
       `To start, here are some of my favourite movies of 2020 🍿`
     );
@@ -152,11 +148,11 @@ function App() {
     return true;
   };
 
-  const handleModalOpen = (imdbID, title, year) => (e) => {
+  const handleModalOpen = (movie) => (e) => {
     // console.log("Movie id is ", e.target.value);
-    setCurrID(imdbID);
-    setTitle(title);
-    setYear(year);
+    setCurrID(movie.imdbID);
+    setTitle(movie.Title);
+    setYear(movie.Year);
     setOpen(true);
   };
 
@@ -171,6 +167,7 @@ function App() {
       <SearchAppBar
         setSearch={setSearch}
         favourites={favourites}
+        setMovies={setMovies}
         setShowFavourites={setShowFavourites}
       />
       <Alert
@@ -216,12 +213,13 @@ function App() {
               )}
             </span>
           )}
-          <CustomizedDialogs
+          <InfoDialog
             handleClose={handleClose}
             open={open}
             plot={plot}
             year={year}
             title={title}
+            rating={rating}
           />
           <Grid container spacing={2}>
             {movies.map((movie) => (
