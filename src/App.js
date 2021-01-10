@@ -23,6 +23,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// const useStateWithLocalStorage = (localStorageKey) => {
+//   let store = localStorage.getItem(localStorageKey) || "";
+//   console.log("Store is ", store);
+//   if (store !== "") {
+//     store = JSON.parse(store);
+//   }
+//   const [value, setValue] = React.useState(store);
+
+//   React.useEffect(() => {
+//     localStorage.setItem(localStorageKey, JSON.stringify(value));
+//   }, [value, localStorageKey]);
+
+//   return [value, setValue];
+// };
+
 function App() {
   const [favourites, setFavourites] = useState([]);
   const [showFavourites, setShowFavourites] = useState(false);
@@ -40,6 +55,10 @@ function App() {
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
   const [rating, setRating] = useState("");
+
+  const classes = useStyles();
+  // localStore -> []
+  // const [localStore, setLocalStore] = useStateWithLocalStorage("favourites");
 
   const fetchMoreData = () => {
     setPage((curr) => curr + 1);
@@ -117,19 +136,21 @@ function App() {
   }, [open, currID]);
 
   useEffect(() => {
+    // if (localStore) {
+    //   setFavourites(localStore);
+    // }
     setAlertMessage(
       `To start, here are some of my favourite movies of 2020 🍿`
     );
     setShowAlert(true);
   }, []);
 
-  const classes = useStyles();
-
   const updateFavourites = (movie) => {
     // Remove from favourites if it already exists
     if (favourites.some((fav) => fav.imdbID === movie.imdbID)) {
       // Same ID found
       setFavourites(favourites.filter((fav) => fav.imdbID !== movie.imdbID));
+      // setLocalStore(localStore.filter((fav) => fav.imdbID !== movie.imdbID)); // Remove from local storage
       return true;
     }
     // Check for size
@@ -145,6 +166,7 @@ function App() {
       return false;
     }
     setFavourites((original) => [...original, movie]);
+    // setLocalStore((original) => [...original, movie]); // Store values in localStorage
     return true;
   };
 
@@ -222,14 +244,21 @@ function App() {
             rating={rating}
           />
           <Grid container spacing={2}>
-            {movies.map((movie) => (
-              <MovieCard
-                key={movie.imdbID}
-                movie={movie}
-                handleModalOpen={handleModalOpen}
-                updateFavourites={updateFavourites}
-              />
-            ))}
+            {movies.map((movie) => {
+              let nominated = false;
+              if (favourites.some((fav) => fav.imdbID === movie.imdbID)) {
+                nominated = true;
+              }
+              return (
+                <MovieCard
+                  key={movie.imdbID}
+                  movie={movie}
+                  handleModalOpen={handleModalOpen}
+                  updateFavourites={updateFavourites}
+                  nominated={nominated}
+                />
+              );
+            })}
           </Grid>
         </Container>
       </InfiniteScroll>

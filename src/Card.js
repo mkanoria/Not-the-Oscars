@@ -41,8 +41,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function MovieCard(props) {
-  const { updateFavourites, handleModalOpen, movie } = props;
-  const [selected, setSelected] = useState(false);
+  const { updateFavourites, handleModalOpen, movie, nominated } = props;
+  const [selected, setSelected] = useState(nominated);
 
   const selectMovie = (movie) => (e) => {
     if (updateFavourites(movie)) {
