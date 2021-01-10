@@ -19,18 +19,18 @@ TODO
 
 ## Installing
 
-First, clone the repository, and cd into the project directory  
+First, clone the repository, and `cd` into the project directory  
 Run `npm install` to download and update all the required dependencies
 
 ## Running locally
 
-Run `npm start` 
+Run `npm start`  
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Tech Stack
 
-Uses React and JavaScript
+Uses React and JavaScript  
 Components are built from [`material-ui`](http://material-ui.com/)
 
 ## Future improvements
