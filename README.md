@@ -12,7 +12,7 @@ TODO
 - Get plot details and the IMDB rating while browsing movies
 - Maximum of 5 movies can be nominated, banner shows up alerting the user and they cannot add more movies
 
-### Improvements
+### Extras
 - Storing a user's nomination list in the browser's local storage, helping persist information across sessions
 - Infinite scroll to browse search results - using pagination on the OMDB search API
 - Animations for adding/deleting movies from nomination lists
