@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import InfoDialog from "./Dialog";
 import MovieCard from "./Card";
 import Alert from "./Alert";
+import NominationHeading from "./NominationHeading";
 import { myTopMovies } from "./topMovies";
 
 const useStyles = makeStyles((theme) => ({
@@ -25,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
 
 const useStateWithLocalStorage = (localStorageKey) => {
   let store = localStorage.getItem(localStorageKey) || "";
-  console.log("Store is ", store);
   if (store !== "") {
     store = JSON.parse(store);
   }
@@ -60,10 +60,12 @@ function App() {
   // localStore -> []
   const [localStore, setLocalStore] = useStateWithLocalStorage("favourites");
 
+  // Fetch More Data for infinite scrolling
   const fetchMoreData = () => {
     setPage((curr) => curr + 1);
   };
 
+  // Change current movies displayed to favourites
   useEffect(() => {
     if (showFavourites) {
       setMovies(favourites);
@@ -174,7 +176,6 @@ function App() {
   };
 
   const handleModalOpen = (movie) => (e) => {
-    // console.log("Movie id is ", e.target.value);
     setCurrID(movie.imdbID);
     setTitle(movie.Title);
     setYear(movie.Year);
@@ -225,19 +226,7 @@ function App() {
         }
       >
         <Container className={classes.cardGrid} maxWidth="md">
-          {showFavourites && (
-            <span style={{ textAlign: "center", paddingBottom: 2 }}>
-              {favourites.length ? (
-                <Typography component="h4" variant="h4">
-                  Your Nominations
-                </Typography>
-              ) : (
-                <Typography component="h4" variant="h4">
-                  No movies nominated, get started by searching!
-                </Typography>
-              )}
-            </span>
-          )}
+          {showFavourites && <NominationHeading favourites={favourites} />}
           <InfoDialog
             handleClose={handleClose}
             open={open}
