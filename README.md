@@ -1,5 +1,4 @@
 # Shoppies 🎬
----
 
 This is my submission for the Shopify Frontend Development Challenge (Summer '21)
 
