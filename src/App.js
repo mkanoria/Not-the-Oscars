@@ -69,7 +69,9 @@ function App() {
       }
       // Send Axios request here
       axios
-        .get(`http://www.omdbapi.com/?apikey=d80719e6&s=${search}&page=${page}`)
+        .get(
+          `https://www.omdbapi.com/?apikey=d80719e6&s=${search}&page=${page}`
+        )
         .then((res) => {
           // Check if response exists
           if (res.data.Response === "False") {
@@ -110,7 +112,7 @@ function App() {
   useEffect(() => {
     async function fetchMoviePlot() {
       axios
-        .get(`http://www.omdbapi.com/?apikey=d80719e6&plot=full&i=${currID}`)
+        .get(`https://www.omdbapi.com/?apikey=d80719e6&plot=full&i=${currID}`)
         .then((res) => {
           const result = res.data.Plot;
           setPlot(result);

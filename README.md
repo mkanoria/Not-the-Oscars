@@ -3,19 +3,23 @@
 This is my submission for the Shopify Frontend Development Challenge (Summer '21)
 
 ## Demo Link
-TODO
+
+Check it out at [https://mkanoria.github.io/Not-the-Oscars](https://mkanoria.github.io/Not-the-Oscars)
 
 ## Core Features
-- Clean UI to Search and browse the OMDB library
-- Add movies from search results to a nomination list
-- Browse through, and remove movies from the nomination list
-- Get plot details and the IMDB rating while browsing movies
-- Maximum of 5 movies can be nominated, banner shows up alerting the user and they cannot add more movies
 
-### Extras
+- Search results should come from OMDB's API ✅
+- Each search result should list at least its title, year of release and a button to nominate that film.✅
+- Updates to the search terms should update the result list ✅
+- Movies in search results can be added and removed from the nomination list. ✅
+- If a search result has already been nominated, disable its nominate button. ✅
+- Display a banner when the user has 5 nominations. ✅
+
+### Extras features
 - Storing a user's nomination list in the browser's local storage, helping persist information across sessions
 - Infinite scroll to browse search results - using pagination on the OMDB search API
 - Animations for adding/deleting movies from nomination lists
+- Get plot details and the IMDB rating while browsing movies
 
 ## Installing
 
@@ -36,6 +40,10 @@ Components are built from [`material-ui`](http://material-ui.com/)
 ## Future improvements
 
 TODO
+
+---
+
+Thanks for checking out my submission! Pls hire 🥺
 
 ---
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
