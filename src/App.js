@@ -1,16 +1,15 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-
-import SearchAppBar from "./AppBar";
+import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import InfiniteScroll from "react-infinite-scroll-component";
 import Typography from "@material-ui/core/Typography";
-
-import InfoDialog from "./Dialog";
-import MovieCard from "./Card";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import Alert from "./Alert";
+import SearchAppBar from "./AppBar";
+import MovieCard from "./Card";
+import InfoDialog from "./Dialog";
+import useStateWithLocalStorage from "./localStorageHook";
 import NominationHeading from "./NominationHeading";
 import { myTopMovies } from "./topMovies";
 
@@ -23,20 +22,6 @@ const useStyles = makeStyles((theme) => ({
     margin: "auto",
   },
 }));
-
-const useStateWithLocalStorage = (localStorageKey) => {
-  let store = localStorage.getItem(localStorageKey) || "";
-  if (store !== "") {
-    store = JSON.parse(store);
-  }
-  const [value, setValue] = React.useState(store);
-
-  React.useEffect(() => {
-    localStorage.setItem(localStorageKey, JSON.stringify(value));
-  }, [value, localStorageKey]);
-
-  return [value, setValue];
-};
 
 function App() {
   const [favourites, setFavourites] = useState([]);
@@ -137,6 +122,7 @@ function App() {
     }
   }, [open, currID]);
 
+  // Initial welcome hook
   useEffect(() => {
     setAlertMessage(
       `To start, here are some of my favourite movies of 2020 🍿`
