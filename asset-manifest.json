@@ -1,19 +1,17 @@
 {
   "files": {
-    "main.js": "/Not-the-Oscars/static/js/main.be2c48eb.chunk.js",
-    "main.js.map": "/Not-the-Oscars/static/js/main.be2c48eb.chunk.js.map",
-    "runtime-main.js": "/Not-the-Oscars/static/js/runtime-main.dcd77cbe.js",
-    "runtime-main.js.map": "/Not-the-Oscars/static/js/runtime-main.dcd77cbe.js.map",
+    "main.js": "/Not-the-Oscars/static/js/main.62bf68d5.chunk.js",
+    "main.js.map": "/Not-the-Oscars/static/js/main.62bf68d5.chunk.js.map",
+    "runtime-main.js": "/Not-the-Oscars/static/js/runtime-main.f1ab5bfa.js",
+    "runtime-main.js.map": "/Not-the-Oscars/static/js/runtime-main.f1ab5bfa.js.map",
     "static/js/2.b3543b89.chunk.js": "/Not-the-Oscars/static/js/2.b3543b89.chunk.js",
     "static/js/2.b3543b89.chunk.js.map": "/Not-the-Oscars/static/js/2.b3543b89.chunk.js.map",
-    "static/js/3.5ec199a8.chunk.js": "/Not-the-Oscars/static/js/3.5ec199a8.chunk.js",
-    "static/js/3.5ec199a8.chunk.js.map": "/Not-the-Oscars/static/js/3.5ec199a8.chunk.js.map",
     "index.html": "/Not-the-Oscars/index.html",
     "static/js/2.b3543b89.chunk.js.LICENSE.txt": "/Not-the-Oscars/static/js/2.b3543b89.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.dcd77cbe.js",
+    "static/js/runtime-main.f1ab5bfa.js",
     "static/js/2.b3543b89.chunk.js",
-    "static/js/main.be2c48eb.chunk.js"
+    "static/js/main.62bf68d5.chunk.js"
   ]
 }
