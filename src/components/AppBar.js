@@ -9,7 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Link from "@material-ui/core/Link";
 import Badge from "@material-ui/core/Badge";
 import LocalActivityRoundedIcon from "@material-ui/icons/LocalActivityRounded";
-import { myTopMovies } from "./topMovies";
+import { myTopMovies } from "../utilities/myTopMovies";
 
 const useStyles = makeStyles((theme) => ({
   root: {

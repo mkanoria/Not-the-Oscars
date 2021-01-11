@@ -39,7 +39,9 @@ Components are built from [`material-ui`](http://material-ui.com/)
 
 ## Future improvements
 
-TODO
+- Add tests
+- Add user authentication (using OAuth)
+- More interactive Modal to get information of selected movies
 
 ---
 

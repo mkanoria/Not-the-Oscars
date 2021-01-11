@@ -7,11 +7,11 @@ import React, { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Alert from "./Alert";
 import SearchAppBar from "./AppBar";
-import MovieCard from "./Card";
+import MovieCard from "./MovieCard";
 import InfoDialog from "./Dialog";
-import useStateWithLocalStorage from "./localStorageHook";
+import useStateWithLocalStorage from "../utilities/localStorageHook";
 import NominationHeading from "./NominationHeading";
-import { myTopMovies } from "./topMovies";
+import { myTopMovies } from "../utilities/myTopMovies";
 
 const useStyles = makeStyles((theme) => ({
   cardGrid: {
@@ -202,15 +202,11 @@ function App() {
           </span>
         }
         endMessage={
-          page === 1 ? (
-            ""
-          ) : (
-            <span style={{ textAlign: "center" }}>
-              <Typography variant="button" display="block">
-                No more results found 😞
-              </Typography>
-            </span>
-          )
+          <span style={{ textAlign: "center" }}>
+            <Typography variant="button" display="block">
+              No more results found 😞
+            </Typography>
+          </span>
         }
       >
         <Container className={classes.cardGrid} maxWidth="md">
