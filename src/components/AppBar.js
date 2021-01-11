@@ -67,11 +67,20 @@ function SearchAppBar(props) {
   const classes = useStyles();
 
   const handleBack = () => {
+    setSearching(false);
+    setPage(1);
     setMovies(myTopMovies);
     setShowFavourites(false);
   };
 
-  const { favourites, setSearch, setMovies, setShowFavourites } = props;
+  const {
+    favourites,
+    setSearch,
+    setMovies,
+    setShowFavourites,
+    setSearching,
+    setPage,
+  } = props;
 
   return (
     <div className={classes.root}>
@@ -91,6 +100,8 @@ function SearchAppBar(props) {
             aria-label="cart"
             onClick={() => {
               setShowFavourites((curr) => {
+                setSearching(false);
+                setPage(1);
                 if (curr) {
                   setMovies(myTopMovies);
                 }
@@ -120,6 +131,8 @@ function SearchAppBar(props) {
               }}
               inputProps={{ "aria-label": "search" }}
               onChange={(e) => {
+                setSearching(true);
+                setShowFavourites(false);
                 setSearch(e.target.value);
               }}
             />

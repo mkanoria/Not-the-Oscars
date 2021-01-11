@@ -31,6 +31,7 @@ function App() {
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [search, setSearch] = useState("");
+  const [searching, setSearching] = useState(false);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
   // State used to handle Modal props
@@ -63,6 +64,7 @@ function App() {
       // Validate that there is input
       if (!search) {
         setMovies(myTopMovies);
+        setSearching(false);
         setPage(1);
         setHasMore(false);
         return;
@@ -95,18 +97,20 @@ function App() {
           }
 
           const results = res.data.Search;
-          if (page === 1) {
-            // This removes the `topMovies` from the list
-            setMovies(results);
-          } else {
-            // If this is not the first page, append to movies list
-            setMovies((old) => [...old, ...results]);
+          if (searching) {
+            if (page === 1) {
+              // This removes the `topMovies` from the list
+              setMovies(results);
+            } else {
+              // If this is not the first page, append to movies list
+              setMovies((old) => [...old, ...results]);
+            }
           }
         });
     }, 500);
 
     return () => clearTimeout(delayDebounceFn);
-  }, [page, search]);
+  }, [page, search, searching]);
 
   // Hook to get movie details if modal opened
   useEffect(() => {
@@ -182,6 +186,8 @@ function App() {
         setSearch={setSearch}
         favourites={favourites}
         setMovies={setMovies}
+        setSearching={setSearching}
+        setPage={setPage}
         setShowFavourites={setShowFavourites}
       />
       <Alert
@@ -195,18 +201,24 @@ function App() {
         next={fetchMoreData}
         hasMore={hasMore}
         loader={
-          <span style={{ textAlign: "center", paddingBottom: 3 }}>
-            <Typography component="h5" variant="h5">
-              Loading! 👀
-            </Typography>
-          </span>
+          searching && (
+            <span style={{ textAlign: "center", paddingBottom: 3 }}>
+              <Typography component="h5" variant="h5">
+                Loading! 👀
+              </Typography>
+            </span>
+          )
         }
         endMessage={
-          <span style={{ textAlign: "center" }}>
-            <Typography variant="button" display="block">
-              No more results found 😞
-            </Typography>
-          </span>
+          !searching ? (
+            ""
+          ) : (
+            <span style={{ textAlign: "center" }}>
+              <Typography variant="button" display="block">
+                No more results found 😞
+              </Typography>
+            </span>
+          )
         }
       >
         <Container className={classes.cardGrid} maxWidth="md">
