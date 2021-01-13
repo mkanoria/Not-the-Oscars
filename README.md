@@ -42,6 +42,7 @@ Components are built from [`material-ui`](http://material-ui.com/)
 - Add tests
 - Add user authentication (using OAuth)
 - More interactive Modal to get information of selected movies
+- Added debounce to reduce OMDB API search calls while looking for movies
 
 ---
 

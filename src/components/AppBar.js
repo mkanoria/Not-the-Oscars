@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SearchAppBar(props) {
+export default function SearchAppBar(props) {
   const classes = useStyles();
 
   const handleBack = () => {
@@ -142,5 +142,3 @@ function SearchAppBar(props) {
     </div>
   );
 }
-
-export default SearchAppBar;

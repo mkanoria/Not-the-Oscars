@@ -69,7 +69,7 @@ export default function MovieCard(props) {
           <CardActions disableSpacing>
             <IconButton
               aria-label="add to favorites"
-              onClick={selectMovie(movie)} // TODO: Change this to show animation on adding
+              onClick={selectMovie(movie)}
             >
               {selected ? (
                 <FavoriteIcon fontSize="small" />
@@ -77,10 +77,7 @@ export default function MovieCard(props) {
                 <FavoriteBorderIcon fontSize="small" />
               )}
             </IconButton>
-            <IconButton
-              aria-label="info"
-              onClick={handleModalOpen(movie)} // TODO: fix this!
-            >
+            <IconButton aria-label="info" onClick={handleModalOpen(movie)}>
               <InfoIcon fontSize="small" />
             </IconButton>
           </CardActions>

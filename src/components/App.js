@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function App() {
+export default function App() {
   const [favourites, setFavourites] = useState([]);
   const [showFavourites, setShowFavourites] = useState(false);
   const [movies, setMovies] = useState([]);
@@ -253,5 +253,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
